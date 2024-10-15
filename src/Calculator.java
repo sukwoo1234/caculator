@@ -34,7 +34,7 @@ public class Calculator extends JFrame implements ActionListener {
                 "4", "5", "6", "*",
                 "1", "2", "3", "-",
                 "0", ".", "=", "+",
-                "C", "⌫", "%", // Clear, Backspace, Modulus buttons
+                "C", "Del", "%", // Clear, Delete (Backspace), Modulus buttons
         };
 
         // Add buttons to panel
@@ -70,7 +70,7 @@ public class Calculator extends JFrame implements ActionListener {
             display.setText(String.valueOf(result));
         } else if (command.equals("C")) {  // Clear the display
             display.setText("");
-        } else if (command.equals("⌫")) {  // Backspace functionality
+        } else if (command.equals("Del")) {  // Backspace functionality
             String currentText = display.getText();
             if (currentText.length() > 0) {
                 display.setText(currentText.substring(0, currentText.length() - 1));
