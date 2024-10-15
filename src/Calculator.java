@@ -5,9 +5,10 @@ import java.awt.event.ActionListener;
 
 public class Calculator extends JFrame implements ActionListener {
 
-    private JTextField display;
+    private final JTextField display;
     private String operator;
-    private double firstNumber, secondNumber, result;
+    private double firstNumber;
+    private double result;
 
     // Constructor
     public Calculator() {
@@ -59,7 +60,7 @@ public class Calculator extends JFrame implements ActionListener {
         if (command.charAt(0) >= '0' && command.charAt(0) <= '9' || command.equals(".")) {
             display.setText(display.getText() + command);
         } else if (command.equals("=")) {
-            secondNumber = Double.parseDouble(display.getText());
+            double secondNumber = Double.parseDouble(display.getText());
             switch (operator) {
                 case "+" -> result = firstNumber + secondNumber;
                 case "-" -> result = firstNumber - secondNumber;
@@ -72,7 +73,7 @@ public class Calculator extends JFrame implements ActionListener {
             display.setText("");
         } else if (command.equals("Del")) {  // Backspace functionality
             String currentText = display.getText();
-            if (currentText.length() > 0) {
+            if (!currentText.isEmpty()) {
                 display.setText(currentText.substring(0, currentText.length() - 1));
             }
         } else {
