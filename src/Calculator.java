@@ -34,7 +34,7 @@ public class Calculator extends JFrame implements ActionListener {
                 "4", "5", "6", "*",
                 "1", "2", "3", "-",
                 "0", ".", "=", "+",
-                "C", // Clear button
+                "C", "⌫", "%", // Clear, Backspace, Modulus buttons
         };
 
         // Add buttons to panel
@@ -65,16 +65,23 @@ public class Calculator extends JFrame implements ActionListener {
                 case "-" -> result = firstNumber - secondNumber;
                 case "*" -> result = firstNumber * secondNumber;
                 case "/" -> result = firstNumber / secondNumber;
+                case "%" -> result = firstNumber % secondNumber;
             }
             display.setText(String.valueOf(result));
         } else if (command.equals("C")) {  // Clear the display
             display.setText("");
+        } else if (command.equals("⌫")) {  // Backspace functionality
+            String currentText = display.getText();
+            if (currentText.length() > 0) {
+                display.setText(currentText.substring(0, currentText.length() - 1));
+            }
         } else {
             firstNumber = Double.parseDouble(display.getText());
             operator = command;
             display.setText("");
         }
     }
+
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
