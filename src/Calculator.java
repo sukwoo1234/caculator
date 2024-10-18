@@ -26,26 +26,28 @@ public class Calculator extends JFrame implements ActionListener {
         setTitle("Windows-Calculator");
         setSize(350, 550);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout(10, 10));
         setLocationRelativeTo(null); // 화면 중앙에 윈도우 배치
 
-        // 연산 과정을 표시할 필드
+        // 연산 과정 표시 필드
         processDisplay = new JTextField();
         processDisplay.setEditable(false);
         processDisplay.setHorizontalAlignment(SwingConstants.RIGHT);
         processDisplay.setFont(new Font("Arial", Font.PLAIN, 18));
         processDisplay.setBackground(Color.LIGHT_GRAY);
         processDisplay.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        add(processDisplay, BorderLayout.NORTH);
 
-        // 결과를 표시할 필드
+        // 결과 표시 필드
         display = new JTextField();
         display.setEditable(false);
         display.setHorizontalAlignment(SwingConstants.RIGHT);
         display.setFont(new Font("Arial", Font.PLAIN, 24));
         display.setBackground(Color.WHITE);
         display.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        add(display, BorderLayout.CENTER);
+
+        // 연산 과정과 결과 패널을 수직으로 1:1 비율로 나누기
+        JSplitPane topSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, processDisplay, display);
+        topSplitPane.setResizeWeight(0.5); // 1:1 비율
+        topSplitPane.setDividerSize(0); // 구분선 두께를 0으로 설정하여 구분선 보이지 않도록
 
         // 버튼 패널 설정 (GridBagLayout 사용)
         JPanel buttonPanel = new JPanel();
@@ -89,8 +91,13 @@ public class Calculator extends JFrame implements ActionListener {
             }
         }
 
-        // 패널을 프레임에 추가
-        add(buttonPanel, BorderLayout.SOUTH);
+        // 전체 화면을 기준으로 상단(연산 과정 및 결과)과 하단(버튼) 비율을 3:7로 나누기
+        JSplitPane mainSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topSplitPane, buttonPanel);
+        mainSplitPane.setResizeWeight(0.3); // 3:7 비율
+        mainSplitPane.setDividerSize(0); // 구분선 두께를 0으로 설정하여 구분선 보이지 않도록
+
+        // JSplitPane을 프레임에 추가
+        add(mainSplitPane);
 
         // 프레임을 보이도록 설정
         setVisible(true);
