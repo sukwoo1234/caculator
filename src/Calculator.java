@@ -53,27 +53,22 @@ public class Calculator extends JFrame implements ActionListener {
         topSplitPane.setResizeWeight(0.5); // 1:1 비율
         topSplitPane.setDividerSize(0); // 구분선 두께를 0으로 설정하여 구분선 보이지 않도록
 
-        // 버튼 패널 설정 (GridBagLayout 사용)
+        // 버튼 패널 설정 (GridLayout 사용)
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridBagLayout());
+        buttonPanel.setLayout(new GridLayout(5, 4, 5, 5)); // 5x4 그리드, 버튼 간격 5픽셀
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         buttonPanel.setBackground(Color.LIGHT_GRAY);
 
         // 버튼 레이블 설정
         String[] buttonLabels = {
-                "C", "CE", "Del", "/",
-                "7", "8", "9", "*",
-                "4", "5", "6", "-",
-                "1", "2", "3", "+",
-                ".", "0", "%", "=" // 초기화, CE, 삭제, 나머지 기능 버튼
+                "7", "8", "9", "/",
+                "4", "5", "6", "*",
+                "1", "2", "3", "-",
+                "0", ".", "=", "+",
+                "C", "CE", "Del", "%" // 초기화, CE, 삭제, 나머지 기능 버튼
         };
 
-        // 버튼 패널에 추가
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.insets = new Insets(5, 5, 5, 5); // 버튼 간격 설정
-
-        int row = 0, col = 0;
+        // 버튼 패널에 버튼 추가
         for (String label : buttonLabels) {
             JButton button = new JButton(label);
             button.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -81,18 +76,7 @@ public class Calculator extends JFrame implements ActionListener {
             button.setBackground(Color.WHITE);
             button.setBorder(BorderFactory.createLineBorder(Color.GRAY));
             button.addActionListener(this);
-
-            gbc.gridx = col;
-            gbc.gridy = row;
-            gbc.weightx = 1.0;
-            gbc.weighty = 1.0;
-            buttonPanel.add(button, gbc);
-
-            col++;
-            if (col == 4) { // 한 행에 4개 버튼
-                col = 0;
-                row++;
-            }
+            buttonPanel.add(button);
         }
 
         // 전체 화면을 기준으로 상단(연산 과정 및 결과)과 하단(버튼) 비율을 3:7로 나누기
