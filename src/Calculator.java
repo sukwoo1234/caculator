@@ -4,24 +4,25 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * 윈도우 표준 계산기만들기를 목적으로 프로그래밍한 간단한 계산기 애플리케이션이다.
- * 기본 산술 연산 및 초기화(C), 삭제(Del), 나머지(%) 기능을 지원한다.
+ * 윈도우 표준 계산기 만들기를 목적으로 프로그래밍한 간단한 계산기 애플리케이션이다.
+ * 기본 산술 연산 및 초기화(C), 삭제(Del), 나머지(%) 기능을 지원하며,
+ * 연산 과정과 결과를 화면에 표시한다.
  * Java Swing 컴포넌트를 사용하여 그래픽 사용자 인터페이스를 구현한다.
  */
 public class Calculator extends JFrame implements ActionListener {
 
     private final JTextField display;
     private String operator;
-    private double firstNumber;
-    private double result;
+    private double currentNumber;
+    private boolean isOperatorPressed = false;
 
     /**
-     * 계산기를 생성하고 사용자 인터페이스를 초기화함.
-     * 메인 윈도우, 디스플레이 필드, 버튼을 설정.
+     * 계산기를 생성하고 사용자 인터페이스를 초기화한다.
+     * 메인 윈도우, 디스플레이 필드, 버튼을 설정한다.
      */
     public Calculator() {
         // 윈도우 생성
-        setTitle("Windows-like Calculator");
+        setTitle("Windows-Calculator");
         setSize(350, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
@@ -36,19 +37,19 @@ public class Calculator extends JFrame implements ActionListener {
         display.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         add(display, BorderLayout.NORTH);
 
-        // 버튼 패널 (GridBagLayout 사용)
+        // 버튼 패널 설정 (GridBagLayout 사용)
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridBagLayout());
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         buttonPanel.setBackground(Color.LIGHT_GRAY);
 
-        // 버튼 레이블
+        // 버튼 레이블 설정
         String[] buttonLabels = {
                 "7", "8", "9", "/",
                 "4", "5", "6", "*",
                 "1", "2", "3", "-",
                 "0", ".", "=", "+",
-                "C", "Del", "%" // 초기화, 삭제, 나머지 기능 버튼
+                "C", "CE", "Del", "%" // 초기화, CE, 삭제, 나머지 기능 버튼
         };
 
         // 버튼 패널에 추가
@@ -86,38 +87,70 @@ public class Calculator extends JFrame implements ActionListener {
     }
 
     /**
-     * 버튼 클릭 이벤트를 처리하여 계산기 연산을 수행.
-     * 버튼에 따라 디스플레이를 업데이트.
+     * 버튼 클릭 이벤트를 처리하여 계산기 연산을 수행하고,
+     * 버튼에 따라 디스플레이를 업데이트한다.
      *
      * @param e 버튼 클릭으로 발생한 ActionEvent
      */
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
 
-        if (command.charAt(0) >= '0' && command.charAt(0) <= '9' || command.equals(".")) {
-            display.setText(display.getText() + command);
-        } else if (command.equals("=")) {
-            double secondNumber = Double.parseDouble(display.getText());
-            switch (operator) {
-                case "+" -> result = firstNumber + secondNumber;
-                case "-" -> result = firstNumber - secondNumber;
-                case "*" -> result = firstNumber * secondNumber;
-                case "/" -> result = firstNumber / secondNumber;
-                case "%" -> result = firstNumber % secondNumber;
+        // 숫자나 소수점 입력
+        if ((command.charAt(0) >= '0' && command.charAt(0) <= '9') || command.equals(".")) {
+            if (isOperatorPressed) {
+                display.setText(command); // 새로운 숫자 입력 시 기존 값을 지우고 시작
+                isOperatorPressed = false;
+            } else {
+                display.setText(display.getText() + command);
             }
-            display.setText(String.valueOf(result));
-        } else if (command.equals("C")) {  // 디스플레이 초기화
+        } else if (command.equals("=")) {
+            // 현재 연산을 수행하고 결과를 표시
+            performCalculation();
+            operator = null; // 연산자 초기화
+        } else if (command.equals("C")) {
+            // 디스플레이와 변수 초기화
             display.setText("");
-        } else if (command.equals("Del")) {  // 백스페이스 기능
+            currentNumber = 0;
+            operator = null;
+        } else if (command.equals("CE")) {
+            // 현재 입력 중인 숫자만 초기화
+            display.setText("");
+        } else if (command.equals("Del")) {
+            // 마지막 한 글자 삭제
             String currentText = display.getText();
             if (!currentText.isEmpty()) {
                 display.setText(currentText.substring(0, currentText.length() - 1));
             }
-        } else {
-            firstNumber = Double.parseDouble(display.getText());
-            operator = command;
-            display.setText("");
+        } else { // 연산자 버튼
+            if (operator != null) {
+                performCalculation(); // 이전 연산 수행
+            } else {
+                currentNumber = Double.parseDouble(display.getText()); // 현재 숫자 저장
+            }
+            operator = command; // 새로운 연산자 설정
+            isOperatorPressed = true;
+
+            // 연산 기호와 함께 연산 과정을 화면에 표시
+            display.setText(display.getText() + " " + operator);
         }
+    }
+
+    /**
+     * 현재까지 저장된 숫자와 디스플레이에 나타난 값을 이용하여
+     * 연산을 수행하고 결과를 디스플레이에 나타낸다.
+     */
+    private void performCalculation() {
+        double secondNumber = Double.parseDouble(display.getText().split(" ")[0]);
+
+        switch (operator) {
+            case "+" -> currentNumber += secondNumber;
+            case "-" -> currentNumber -= secondNumber;
+            case "*" -> currentNumber *= secondNumber;
+            case "/" -> currentNumber /= secondNumber;
+            case "%" -> currentNumber %= secondNumber;
+        }
+
+        display.setText(String.valueOf(currentNumber));
     }
 
     /**
