@@ -11,7 +11,8 @@ import java.awt.event.ActionListener;
  */
 public class Calculator extends JFrame implements ActionListener {
 
-    private final JTextField display;
+    private final JTextField display; // 결과 표시
+    private final JTextField processDisplay; // 연산 과정 표시
     private String operator;
     private double currentNumber;
     private boolean isOperatorPressed = false;
@@ -23,19 +24,28 @@ public class Calculator extends JFrame implements ActionListener {
     public Calculator() {
         // 윈도우 생성
         setTitle("Windows-Calculator");
-        setSize(350, 500);
+        setSize(350, 550);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
         setLocationRelativeTo(null); // 화면 중앙에 윈도우 배치
 
-        // 디스플레이 필드
+        // 연산 과정을 표시할 필드
+        processDisplay = new JTextField();
+        processDisplay.setEditable(false);
+        processDisplay.setHorizontalAlignment(SwingConstants.RIGHT);
+        processDisplay.setFont(new Font("Arial", Font.PLAIN, 18));
+        processDisplay.setBackground(Color.LIGHT_GRAY);
+        processDisplay.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        add(processDisplay, BorderLayout.NORTH);
+
+        // 결과를 표시할 필드
         display = new JTextField();
         display.setEditable(false);
         display.setHorizontalAlignment(SwingConstants.RIGHT);
         display.setFont(new Font("Arial", Font.PLAIN, 24));
         display.setBackground(Color.WHITE);
         display.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        add(display, BorderLayout.NORTH);
+        add(display, BorderLayout.CENTER);
 
         // 버튼 패널 설정 (GridBagLayout 사용)
         JPanel buttonPanel = new JPanel();
@@ -80,7 +90,7 @@ public class Calculator extends JFrame implements ActionListener {
         }
 
         // 패널을 프레임에 추가
-        add(buttonPanel, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.SOUTH);
 
         // 프레임을 보이도록 설정
         setVisible(true);
@@ -107,9 +117,11 @@ public class Calculator extends JFrame implements ActionListener {
             // 현재 연산을 수행하고 결과를 표시
             performCalculation();
             operator = null; // 연산자 초기화
+            processDisplay.setText(""); // "=" 이후에는 새로운 연산을 시작하므로 과정 초기화
         } else if (command.equals("C")) {
             // 디스플레이와 변수 초기화
             display.setText("");
+            processDisplay.setText("");
             currentNumber = 0;
             operator = null;
         } else if (command.equals("CE")) {
@@ -131,7 +143,7 @@ public class Calculator extends JFrame implements ActionListener {
             isOperatorPressed = true;
 
             // 연산 기호와 함께 연산 과정을 화면에 표시
-            display.setText(display.getText() + " " + operator);
+            processDisplay.setText(processDisplay.getText() + display.getText() + " " + operator + " ");
         }
     }
 
@@ -140,7 +152,7 @@ public class Calculator extends JFrame implements ActionListener {
      * 연산을 수행하고 결과를 디스플레이에 나타낸다.
      */
     private void performCalculation() {
-        double secondNumber = Double.parseDouble(display.getText().split(" ")[0]);
+        double secondNumber = Double.parseDouble(display.getText());
 
         switch (operator) {
             case "+" -> currentNumber += secondNumber;
