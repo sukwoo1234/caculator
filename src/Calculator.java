@@ -23,10 +23,14 @@ public class Calculator extends JFrame implements ActionListener {
      */
     public Calculator() {
         // 윈도우 생성
-        setTitle("Windows-Calculator");
+        setTitle("계산기");
         setSize(350, 550);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // 화면 중앙에 윈도우 배치
+
+        // 아이콘 설정
+        ImageIcon icon = new ImageIcon("C:\\Users\\USER\\IdeaProjects\\caculator\\caculator.png"); // 아이콘 파일 경로
+        setIconImage(icon.getImage()); // 아이콘을 JFrame에 설정
 
         // 연산 과정 표시 필드
         processDisplay = new JTextField();
