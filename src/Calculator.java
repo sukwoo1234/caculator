@@ -37,7 +37,9 @@ public class Calculator extends JFrame implements ActionListener {
         processDisplay.setEditable(false);
         processDisplay.setHorizontalAlignment(SwingConstants.RIGHT);
         processDisplay.setFont(new Font("Arial", Font.PLAIN, 18));
-        processDisplay.setBackground(Color.LIGHT_GRAY);
+        // 배경색과 글자색을 동일하게 설정
+        processDisplay.setBackground(Color.WHITE);  // 배경색
+        processDisplay.setForeground(Color.BLACK);  // 글자색
         processDisplay.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         // 결과 표시 필드
@@ -45,7 +47,9 @@ public class Calculator extends JFrame implements ActionListener {
         display.setEditable(false);
         display.setHorizontalAlignment(SwingConstants.RIGHT);
         display.setFont(new Font("Arial", Font.PLAIN, 24));
-        display.setBackground(Color.WHITE);
+        // 배경색과 글자색을 동일하게 설정
+        display.setBackground(Color.WHITE);  // 배경색
+        display.setForeground(Color.BLACK);  // 글자색
         display.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // 연산 과정과 결과 패널을 수직으로 1:1 비율로 나누기
