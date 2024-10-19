@@ -157,7 +157,12 @@ public class Calculator extends JFrame implements ActionListener {
             case "%" -> currentNumber %= secondNumber;
         }
 
-        display.setText(String.valueOf(currentNumber));
+        // 결과가 정수인지 확인하고 정수로 변환하여 출력
+        if (currentNumber == (int) currentNumber) {
+            display.setText(String.valueOf((int) currentNumber)); // 정수일 때는 소수점 없이 표시
+        } else {
+            display.setText(String.valueOf(currentNumber)); // 소수점이 있는 경우 그대로 표시
+        }
     }
 
     /**
