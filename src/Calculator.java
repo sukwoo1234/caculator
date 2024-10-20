@@ -36,8 +36,9 @@ public class Calculator extends JFrame implements ActionListener {
         processDisplay = new JTextField();
         processDisplay.setEditable(false);
         processDisplay.setHorizontalAlignment(SwingConstants.RIGHT);
-        processDisplay.setFont(new Font("Arial", Font.PLAIN, 18));
-        // 배경색과 글자색을 동일하게 설정
+        // 텍스트 크기를 줄임
+        //배경색과 글자색을 동일하게 설정
+        processDisplay.setFont(new Font("Arial", Font.PLAIN, 16)); // 텍스트 크기 설정
         processDisplay.setBackground(Color.WHITE);  // 배경색
         processDisplay.setForeground(Color.BLACK);  // 글자색
         processDisplay.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -46,8 +47,8 @@ public class Calculator extends JFrame implements ActionListener {
         display = new JTextField();
         display.setEditable(false);
         display.setHorizontalAlignment(SwingConstants.RIGHT);
-        display.setFont(new Font("Arial", Font.PLAIN, 24));
-        // 배경색과 글자색을 동일하게 설정
+        // 텍스트 크기를 크게 하고 굵게 설정
+        display.setFont(new Font("Arial", Font.BOLD, 32)); // 텍스트 크기와 굵기 설정
         display.setBackground(Color.WHITE);  // 배경색
         display.setForeground(Color.BLACK);  // 글자색
         display.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
