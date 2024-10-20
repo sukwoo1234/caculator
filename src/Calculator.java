@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.plaf.ButtonUI;
+import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,14 +10,15 @@ import java.awt.event.ActionListener;
  * 기본 산술 연산 및 초기화(C), 삭제(Del), 나머지(%) 기능을 지원하며,
  * 연산 과정과 결과를 화면에 표시한다.
  * Java Swing 컴포넌트를 사용하여 그래픽 사용자 인터페이스를 구현한다.
+ * 버튼을 둥근 모서리로 커스터마이징하고, 버튼의 크기를 조정하였다.
  */
 public class Calculator extends JFrame implements ActionListener {
 
     private final JTextField display; // 결과 표시
     private final JTextField processDisplay; // 연산 과정 표시
-    private String operator;
-    private double currentNumber;
-    private boolean isOperatorPressed = false;
+    private String operator; // 현재 연산자
+    private double currentNumber; // 현재까지 계산된 값
+    private boolean isOperatorPressed = false; // 연산자가 눌렸는지 확인
 
     /**
      * 계산기를 생성하고 사용자 인터페이스를 초기화한다.
@@ -36,8 +39,6 @@ public class Calculator extends JFrame implements ActionListener {
         processDisplay = new JTextField();
         processDisplay.setEditable(false);
         processDisplay.setHorizontalAlignment(SwingConstants.RIGHT);
-        // 텍스트 크기를 줄임
-        //배경색과 글자색을 동일하게 설정
         processDisplay.setFont(new Font("Arial", Font.PLAIN, 16)); // 텍스트 크기 설정
         processDisplay.setBackground(Color.WHITE);  // 배경색
         processDisplay.setForeground(Color.BLACK);  // 글자색
@@ -47,7 +48,6 @@ public class Calculator extends JFrame implements ActionListener {
         display = new JTextField();
         display.setEditable(false);
         display.setHorizontalAlignment(SwingConstants.RIGHT);
-        // 텍스트 크기를 크게 하고 굵게 설정
         display.setFont(new Font("Arial", Font.BOLD, 32)); // 텍스트 크기와 굵기 설정
         display.setBackground(Color.WHITE);  // 배경색
         display.setForeground(Color.BLACK);  // 글자색
@@ -66,20 +66,26 @@ public class Calculator extends JFrame implements ActionListener {
 
         // 버튼 레이블 설정
         String[] buttonLabels = {
+                "%", "CE", "C", "Del",// 초기화, CE, 삭제, 나머지 기능 버튼
                 "7", "8", "9", "/",
                 "4", "5", "6", "*",
                 "1", "2", "3", "-",
-                "0", ".", "=", "+",
-                "C", "CE", "Del", "%" // 초기화, CE, 삭제, 나머지 기능 버튼
+                ".", "0", "=", "+"
         };
 
         // 버튼 패널에 버튼 추가
         for (String label : buttonLabels) {
-            JButton button = new JButton(label);
+            JButton button = new JButton(label) {
+                @Override
+                public void setUI(ButtonUI ui) {
+                    super.setUI(new RoundedButtonUI()); // 둥근 모서리 버튼 UI 설정
+                }
+            };
             button.setFont(new Font("Arial", Font.PLAIN, 20));
             button.setFocusPainted(false);
             button.setBackground(Color.WHITE);
             button.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+            button.setPreferredSize(new Dimension(60, 40)); // 버튼 크기 설정 (높이를 줄임)
             button.addActionListener(this);
             buttonPanel.add(button);
         }
@@ -179,5 +185,32 @@ public class Calculator extends JFrame implements ActionListener {
     public static void main(String[] args) throws Exception {
         UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         new Calculator();
+    }
+
+    /**
+     * 버튼 UI를 둥글게 만드는 클래스.
+     * {@link BasicButtonUI}를 확장하여 paint 메서드를 재정의하여 둥근 사각형 버튼을 구현한다.
+     */
+    private static class RoundedButtonUI extends BasicButtonUI {
+        @Override
+        public void installUI(JComponent c) {
+            super.installUI(c);
+            AbstractButton button = (AbstractButton) c;
+            button.setOpaque(false);
+            button.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        }
+
+        @Override
+        public void paint(Graphics g, JComponent c) {
+            AbstractButton button = (AbstractButton) c;
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            // 둥근 사각형 그리기
+            g2.setColor(button.getBackground());
+            g2.fillRoundRect(0, 0, c.getWidth(), c.getHeight(), 30, 30); // 30x30 모서리 둥글기
+            super.paint(g2, c);
+            g2.dispose();
+        }
     }
 }
