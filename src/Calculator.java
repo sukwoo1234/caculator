@@ -25,80 +25,69 @@ public class Calculator extends JFrame implements ActionListener {
      * 메인 윈도우, 디스플레이 필드, 버튼을 설정한다.
      */
     public Calculator() {
-        // 윈도우 생성
         setTitle("계산기");
-        setSize(350, 550);
+        setSize(335, 535);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // 화면 중앙에 윈도우 배치
+        setLocationRelativeTo(null);
 
-        // 아이콘 설정
-        ImageIcon icon = new ImageIcon("C:\\Users\\USER\\IdeaProjects\\caculator\\caculator.png"); // 아이콘 파일 경로
-        setIconImage(icon.getImage()); // 아이콘을 JFrame에 설정
+        ImageIcon icon = new ImageIcon("C:\\Users\\USER\\IdeaProjects\\caculator\\caculator.png");
+        setIconImage(icon.getImage());
 
-        // 연산 과정 표시 필드
         processDisplay = new JTextField();
         processDisplay.setEditable(false);
         processDisplay.setHorizontalAlignment(SwingConstants.RIGHT);
-        processDisplay.setFont(new Font("Arial", Font.PLAIN, 16)); // 텍스트 크기 설정
-        processDisplay.setBackground(Color.WHITE);  // 배경색
-        processDisplay.setForeground(Color.BLACK);  // 글자색
+        processDisplay.setFont(new Font("Arial", Font.PLAIN, 16));
+        processDisplay.setBackground(Color.WHITE);
+        processDisplay.setForeground(Color.BLACK);
         processDisplay.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-        // 결과 표시 필드
         display = new JTextField();
         display.setEditable(false);
         display.setHorizontalAlignment(SwingConstants.RIGHT);
-        display.setFont(new Font("Arial", Font.BOLD, 32)); // 텍스트 크기와 굵기 설정
-        display.setBackground(Color.WHITE);  // 배경색
-        display.setForeground(Color.BLACK);  // 글자색
+        display.setFont(new Font("Arial", Font.BOLD, 32));
+        display.setBackground(Color.WHITE);
+        display.setForeground(Color.BLACK);
         display.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // 연산 과정과 결과 패널을 수직으로 1:1 비율로 나누기
         JSplitPane topSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, processDisplay, display);
-        topSplitPane.setResizeWeight(0.5); // 1:1 비율
-        topSplitPane.setDividerSize(0); // 구분선 두께를 0으로 설정하여 구분선 보이지 않도록
+        topSplitPane.setResizeWeight(0.5);
+        topSplitPane.setDividerSize(0);
 
-        // 버튼 패널 설정 (GridLayout 사용)
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(5, 4, 5, 5)); // 5x4 그리드, 버튼 간격 5픽셀
+        buttonPanel.setLayout(new GridLayout(6, 4, 5, 5));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         buttonPanel.setBackground(Color.LIGHT_GRAY);
 
-        // 버튼 레이블 설정
         String[] buttonLabels = {
-                "%", "CE", "C", "Del",// 초기화, CE, 삭제, 나머지 기능 버튼
-                "7", "8", "9", "/",
-                "4", "5", "6", "*",
-                "1", "2", "3", "-",
+                "(1)/(x)", "x²", "√x", "/",
+                "%", "CE", "C", "Del",
+                "7", "8", "9", "*",
+                "4", "5", "6", "-",
+                "1", "2", "3", "+",
                 ".", "0", "=", "+"
         };
 
-        // 버튼 패널에 버튼 추가
         for (String label : buttonLabels) {
             JButton button = new JButton(label) {
                 @Override
                 public void setUI(ButtonUI ui) {
-                    super.setUI(new RoundedButtonUI()); // 둥근 모서리 버튼 UI 설정
+                    super.setUI(new RoundedButtonUI());
                 }
             };
             button.setFont(new Font("Arial", Font.PLAIN, 20));
             button.setFocusPainted(false);
             button.setBackground(Color.WHITE);
             button.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-            button.setPreferredSize(new Dimension(60, 40)); // 버튼 크기 설정 (높이를 줄임)
-            button.addActionListener(this);
+            button.setPreferredSize(new Dimension(60, 40));
+            button.addActionListener(this); // new Calculaor()
             buttonPanel.add(button);
         }
 
-        // 전체 화면을 기준으로 상단(연산 과정 및 결과)과 하단(버튼) 비율을 3:7로 나누기
         JSplitPane mainSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topSplitPane, buttonPanel);
-        mainSplitPane.setResizeWeight(0.3); // 3:7 비율
-        mainSplitPane.setDividerSize(0); // 구분선 두께를 0으로 설정하여 구분선 보이지 않도록
+        mainSplitPane.setResizeWeight(0.3);
+        mainSplitPane.setDividerSize(0);
 
-        // JSplitPane을 프레임에 추가
         add(mainSplitPane);
-
-        // 프레임을 보이도록 설정
         setVisible(true);
     }
 
@@ -111,51 +100,101 @@ public class Calculator extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
 
-        // 숫자나 소수점 입력
-        if ((command.charAt(0) >= '0' && command.charAt(0) <= '9') || command.equals(".")) {
+        // 숫자나 소수점 입력 시
+        if ((command.charAt(0) >= '0' && command.charAt(0) <= '9') || command.equals(".")) { // command.matches("^[0-9]$"
             if (isOperatorPressed) {
-                display.setText(command); // 새로운 숫자 입력 시 기존 값을 지우고 시작
+                display.setText(command);
                 isOperatorPressed = false;
             } else {
                 display.setText(display.getText() + command);
             }
-        } else if (command.equals("=")) {
-            // 현재 연산을 수행하고 결과를 표시
+        }
+        // "=" 버튼을 눌렀을 때 연산 수행
+        else if (command.equals("=")) {
             performCalculation();
-            operator = null; // 연산자 초기화
-            processDisplay.setText(""); // "=" 이후에는 새로운 연산을 시작하므로 과정 초기화
-        } else if (command.equals("C")) {
-            // 디스플레이와 변수 초기화
+            operator = null;
+            processDisplay.setText("");
+        }
+        // "C" 버튼을 눌렀을 때 전체 초기화
+        else if (command.equals("C")) {
             display.setText("");
             processDisplay.setText("");
             currentNumber = 0;
             operator = null;
-        } else if (command.equals("CE")) {
-            // 현재 입력 중인 숫자만 초기화
+        }
+        // "CE" 버튼을 눌렀을 때 현재 입력 초기화
+        else if (command.equals("CE")) {
             display.setText("");
-        } else if (command.equals("Del")) {
-            // 마지막 한 글자 삭제
+        }
+        // "Del" 버튼을 눌렀을 때 마지막 문자 삭제
+        else if (command.equals("Del")) {
             String currentText = display.getText();
             if (!currentText.isEmpty()) {
                 display.setText(currentText.substring(0, currentText.length() - 1));
             }
-        } else { // 연산자 버튼
-            if (operator != null) {
-                performCalculation(); // 이전 연산 수행
-            } else {
-                currentNumber = Double.parseDouble(display.getText()); // 현재 숫자 저장
-            }
-            operator = command; // 새로운 연산자 설정
-            isOperatorPressed = true;
+        }
+        // "1/x" 버튼을 눌렀을 때 역수 계산
+        else if (command.equals("(1)/(x)")) {
+            try {
+                double value = Double.parseDouble(display.getText());
+                if (value == 0) {
+                    display.setText("오류"); // 0으로 나누기 방지
+                    return;
+                }
 
-            // 연산 기호와 함께 연산 과정을 화면에 표시
+                // 역수 계산
+                double result = 1 / value; // display
+
+                // process
+                processDisplay.setText("1/(" + value + ")");
+
+                // display
+                display.setText(result + "");
+
+            } catch (NumberFormatException ex) {
+                display.setText("오류"); // 숫자가 아닌 값이 입력된 경우 오류 표시
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+        // "x²" 버튼을 눌렀을 때 제곱 계산
+        else if (command.equals("x²")) {
+            double value = Double.parseDouble(display.getText());
+            processDisplay.setText("sqr(" + value + ")");
+            display.setText(String.valueOf(value * value));
+            isOperatorPressed = true; // 연산 완료 상태로 설정
+        }
+        // "√x" 버튼을 눌렀을 때 제곱근 계산
+        else if (command.equals("√x")) {
+            double value = Double.parseDouble(display.getText());
+            processDisplay.setText("√(" + value + ")");
+            display.setText(String.valueOf(Math.sqrt(value)));
+            isOperatorPressed = true; // 연산 완료 상태로 설정
+        }
+        // 연산자 버튼을 눌렀을 때
+        else {
+            if (operator != null) {
+                performCalculation();
+            } else {
+                currentNumber = Double.parseDouble(display.getText());
+            }
+            operator = command;
+            isOperatorPressed = true;
             processDisplay.setText(processDisplay.getText() + display.getText() + " " + operator + " ");
         }
     }
 
     /**
-     * 현재까지 저장된 숫자와 디스플레이에 나타난 값을 이용하여
-     * 연산을 수행하고 결과를 디스플레이에 나타낸다.
+     * 현재 설정된 연산자에 따라 계산을 수행한다.
+     * 연산 결과는 currentNumber 변수에 저장되고, 결과 필드에 표시된다.
      */
     private void performCalculation() {
         double secondNumber = Double.parseDouble(display.getText());
@@ -168,19 +207,18 @@ public class Calculator extends JFrame implements ActionListener {
             case "%" -> currentNumber %= secondNumber;
         }
 
-        // 결과가 정수인지 확인하고 정수로 변환하여 출력
+        // 정수로 표현 가능한 경우 소수점을 제거하고 표시
         if (currentNumber == (int) currentNumber) {
-            display.setText(String.valueOf((int) currentNumber)); // 정수일 때는 소수점 없이 표시
+            display.setText(String.valueOf((int) currentNumber));
         } else {
-            display.setText(String.valueOf(currentNumber)); // 소수점이 있는 경우 그대로 표시
+            display.setText(String.valueOf(currentNumber));
         }
     }
 
     /**
-     * 계산기 애플리케이션을 실행하는 메인 메서드.
-     *
-     * @param args 명령줄 인수 (사용하지 않음)
-     * @throws Exception Look and Feel 설정 실패 시 예외 발생
+     * 프로그램 실행 시 계산기 애플리케이션을 생성한다.
+     * @param args 명령줄 인수 (사용되지 않음)
+     * @throws Exception UI 설정 시 발생할 수 있는 예외
      */
     public static void main(String[] args) throws Exception {
         UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -188,8 +226,7 @@ public class Calculator extends JFrame implements ActionListener {
     }
 
     /**
-     * 버튼 UI를 둥글게 만드는 클래스.
-     * {@link BasicButtonUI}를 확장하여 paint 메서드를 재정의하여 둥근 사각형 버튼을 구현한다.
+     * 버튼을 둥근 모서리로 커스터마이징하는 클래스이다.
      */
     private static class RoundedButtonUI extends BasicButtonUI {
         @Override
@@ -206,11 +243,14 @@ public class Calculator extends JFrame implements ActionListener {
             Graphics2D g2 = (Graphics2D) g.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-            // 둥근 사각형 그리기
             g2.setColor(button.getBackground());
-            g2.fillRoundRect(0, 0, c.getWidth(), c.getHeight(), 30, 30); // 30x30 모서리 둥글기
+            g2.fillRoundRect(0, 0, c.getWidth(), c.getHeight(), 30, 30);
             super.paint(g2, c);
             g2.dispose();
         }
     }
 }
+
+
+// 연속 계산에서 앞에 숫자 연산자 제거 예외처리
+// 9 * 6 -   -> 54 -
