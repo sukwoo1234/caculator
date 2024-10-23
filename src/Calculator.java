@@ -30,7 +30,7 @@ public class Calculator extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        ImageIcon icon = new ImageIcon("C:\\Users\\USER\\IdeaProjects\\caculator\\src\\images\\caculator.png");
+        ImageIcon icon = new ImageIcon("src/images/caculator.png");
         setIconImage(icon.getImage());
 
         processDisplay = new JTextField();
