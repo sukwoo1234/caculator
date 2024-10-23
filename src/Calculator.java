@@ -182,28 +182,26 @@ public class Calculator extends JFrame implements ActionListener {
         }
         // 연산자 버튼을 눌렀을 때
         else {
+            // 현재 디스플레이의 숫자를 currentNumber에 저장
             if (operator != null) {
                 performCalculation();
             } else {
                 currentNumber = Double.parseDouble(display.getText());
             }
 
+            // 연산자 업데이트
             operator = command;
             isOperatorPressed = true;
-            // 연산 과정 업데이트: 기존 연산자 제거 후 새로운 연산자 추가
-            String processText = processDisplay.getText();
-            int lastOperatorIndex = Math.max(processText.lastIndexOf("+"),
-                    Math.max(processText.lastIndexOf("-"),
-                            Math.max(processText.lastIndexOf("*"),
-                                    processText.lastIndexOf("/"))));
-            if (lastOperatorIndex != -1 && lastOperatorIndex < processText.length() - 1) {
-                processText = processText.substring(0, lastOperatorIndex + 1);
-            } else {
-                processText += display.getText();
-            }
 
             // 연산 과정 표시 업데이트
-            processDisplay.setText(currentNumber + " " + operator + " ");
+            String processText = (currentNumber == (int) currentNumber) ?
+                    String.valueOf((int) currentNumber) : String.valueOf(currentNumber);
+
+            // 연산 과정 업데이트
+            processDisplay.setText(processText + " " + operator + " ");
+
+            // 디스플레이 초기화
+            display.setText("");
         }
 
     }
@@ -226,10 +224,8 @@ public class Calculator extends JFrame implements ActionListener {
         // 정수로 표현 가능한 경우 소수점을 제거하고 표시
         if (currentNumber == (int) currentNumber) {
             display.setText(String.valueOf((int) currentNumber));
-            processDisplay.setText(String.valueOf((int)currentNumber));
         } else {
             display.setText(String.valueOf(currentNumber));
-            processDisplay.setText(String.valueOf(currentNumber));
         }
     }
 
