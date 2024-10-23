@@ -102,6 +102,12 @@ public class Calculator extends JFrame implements ActionListener {
 
         // 숫자나 소수점 입력 시
         if ((command.charAt(0) >= '0' && command.charAt(0) <= '9') || command.equals(".")) {
+            if (command.equals(".")) {
+                // 현재 display에 숫자가 없고, 소수점이 입력된 경우 무시
+                if (display.getText().isEmpty() || display.getText().equals(".")) {
+                    return; // 소수점만 입력할 수 없음
+                }
+            }
             if (isOperatorPressed) {
                 display.setText(command);
                 isOperatorPressed = false;
