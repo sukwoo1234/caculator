@@ -61,7 +61,7 @@ public class Calculator extends JFrame implements ActionListener {
         String[] buttonLabels = {
                 "%", "CE", "C", "Del",
                 "(1)/(x)", "x²", "√x", "÷",
-                "7", "8", "9", "*",
+                "7", "8", "9", "x",
                 "4", "5", "6", "-",
                 "1", "2", "3", "+",
                 "+/-", "0", ".", "="
@@ -138,11 +138,38 @@ public class Calculator extends JFrame implements ActionListener {
             try {
                 double value = Double.parseDouble(display.getText());
                 value = -value;
-                display.setText(String.valueOf(value));
+                // 정수로 표현 가능한 경우 소수점을 제거하고 표시
+                if (value == (int) value) {
+                    display.setText(String.valueOf((int) value));
+                } else {
+                    display.setText(String.valueOf(value));
+                }
             } catch (NumberFormatException ex) {
                 display.setText("오류"); // 숫자가 아닌 값이 입력된 경우 오류 표시
             }
         }
+
+// "%" 버튼을 눌렀을 때
+        else if (command.equals("%")) {
+            try {
+                double value = Double.parseDouble(display.getText());
+                // 비율만 표시하기 위해 value / 100을 계산
+                double percentValue = value / 100;
+
+                // 디스플레이에 비율 표시
+                display.setText(String.valueOf(percentValue));
+
+                // 연산 과정 표시 업데이트
+                processDisplay.setText(currentNumber + " * " + percentValue + " = ");
+
+                // 현재 연산자 설정 (곱셈)
+                operator = "x";
+                isOperatorPressed = true; // 연산자 눌림 상태로 설정
+            } catch (NumberFormatException ex) {
+                display.setText("오류"); // 숫자가 아닌 값이 입력된 경우 오류 표시
+            }
+        }
+
         // "1/x" 버튼을 눌렀을 때 역수 계산
         else if (command.equals("(1)/(x)")) {
             try {
@@ -216,9 +243,8 @@ public class Calculator extends JFrame implements ActionListener {
         switch (operator) {
             case "+" -> currentNumber += secondNumber;
             case "-" -> currentNumber -= secondNumber;
-            case "*" -> currentNumber *= secondNumber;
+            case "x" -> currentNumber *= secondNumber;
             case "÷" -> currentNumber /= secondNumber;
-            case "%" -> currentNumber %= secondNumber;
         }
 
         // 정수로 표현 가능한 경우 소수점을 제거하고 표시
