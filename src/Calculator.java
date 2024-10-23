@@ -30,13 +30,13 @@ public class Calculator extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        ImageIcon icon = new ImageIcon("C:\\Users\\USER\\IdeaProjects\\caculator\\caculator.png");
+        ImageIcon icon = new ImageIcon("C:\\Users\\USER\\IdeaProjects\\caculator\\src\\images\\caculator.png");
         setIconImage(icon.getImage());
 
         processDisplay = new JTextField();
         processDisplay.setEditable(false);
         processDisplay.setHorizontalAlignment(SwingConstants.RIGHT);
-        processDisplay.setFont(new Font("Arial", Font.PLAIN, 16));
+        processDisplay.setFont(new Font("Malgun Gothic", Font.PLAIN, 16));
         processDisplay.setBackground(Color.WHITE);
         processDisplay.setForeground(Color.BLACK);
         processDisplay.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -44,7 +44,7 @@ public class Calculator extends JFrame implements ActionListener {
         display = new JTextField();
         display.setEditable(false);
         display.setHorizontalAlignment(SwingConstants.RIGHT);
-        display.setFont(new Font("Arial", Font.BOLD, 32));
+        display.setFont(new Font("Malgun Gothic", Font.BOLD, 32));
         display.setBackground(Color.WHITE);
         display.setForeground(Color.BLACK);
         display.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -59,12 +59,12 @@ public class Calculator extends JFrame implements ActionListener {
         buttonPanel.setBackground(Color.LIGHT_GRAY);
 
         String[] buttonLabels = {
-                "(1)/(x)", "x²", "√x", "/",
                 "%", "CE", "C", "Del",
+                "(1)/(x)", "x²", "√x", "÷",
                 "7", "8", "9", "*",
                 "4", "5", "6", "-",
                 "1", "2", "3", "+",
-                ".", "0", "=", "+"
+                "+/-", "0", ".", "="
         };
 
         for (String label : buttonLabels) {
@@ -101,7 +101,7 @@ public class Calculator extends JFrame implements ActionListener {
         String command = e.getActionCommand();
 
         // 숫자나 소수점 입력 시
-        if ((command.charAt(0) >= '0' && command.charAt(0) <= '9') || command.equals(".")) { // command.matches("^[0-9]$"
+        if ((command.charAt(0) >= '0' && command.charAt(0) <= '9') || command.equals(".")) {
             if (isOperatorPressed) {
                 display.setText(command);
                 isOperatorPressed = false;
@@ -133,17 +133,28 @@ public class Calculator extends JFrame implements ActionListener {
                 display.setText(currentText.substring(0, currentText.length() - 1));
             }
         }
+        // "+/-" 버튼을 눌렀을 때 부호 변경
+        else if (command.equals("+/-")) {
+            try {
+                double value = Double.parseDouble(display.getText());
+                value = -value;
+                display.setText(String.valueOf(value));
+            } catch (NumberFormatException ex) {
+                display.setText("오류"); // 숫자가 아닌 값이 입력된 경우 오류 표시
+            }
+        }
         // "1/x" 버튼을 눌렀을 때 역수 계산
         else if (command.equals("(1)/(x)")) {
             try {
                 double value = Double.parseDouble(display.getText());
                 if (value == 0) {
+                    processDisplay.setText("1/(0)");
                     display.setText("오류"); // 0으로 나누기 방지
                     return;
                 }
 
                 // 역수 계산
-                double result = 1 / value; // display
+                double result = 1 / value;
 
                 // process
                 processDisplay.setText("1/(" + value + ")");
@@ -155,16 +166,6 @@ public class Calculator extends JFrame implements ActionListener {
                 display.setText("오류"); // 숫자가 아닌 값이 입력된 경우 오류 표시
             }
         }
-
-
-
-
-
-
-
-
-
-
         // "x²" 버튼을 눌렀을 때 제곱 계산
         else if (command.equals("x²")) {
             double value = Double.parseDouble(display.getText());
@@ -203,7 +204,7 @@ public class Calculator extends JFrame implements ActionListener {
             case "+" -> currentNumber += secondNumber;
             case "-" -> currentNumber -= secondNumber;
             case "*" -> currentNumber *= secondNumber;
-            case "/" -> currentNumber /= secondNumber;
+            case "÷" -> currentNumber /= secondNumber;
             case "%" -> currentNumber %= secondNumber;
         }
 
@@ -226,7 +227,7 @@ public class Calculator extends JFrame implements ActionListener {
     }
 
     /**
-     * 버튼을 둥근 모서리로 커스터마이징하는 클래스이다.
+     * 버튼을 둥근 모서리로 설정하기 위한 UI 커스터마이징 클래스이다.
      */
     private static class RoundedButtonUI extends BasicButtonUI {
         @Override
@@ -234,23 +235,23 @@ public class Calculator extends JFrame implements ActionListener {
             super.installUI(c);
             AbstractButton button = (AbstractButton) c;
             button.setOpaque(false);
-            button.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            button.setBorderPainted(false);
+            button.setFocusable(false);
         }
 
         @Override
         public void paint(Graphics g, JComponent c) {
-            AbstractButton button = (AbstractButton) c;
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            AbstractButton b = (AbstractButton) c;
+            paintBackground(g, b, b.getModel().isPressed() ? 2 : 0);
+            super.paint(g, c);
+        }
 
-            g2.setColor(button.getBackground());
-            g2.fillRoundRect(0, 0, c.getWidth(), c.getHeight(), 30, 30);
-            super.paint(g2, c);
-            g2.dispose();
+        private void paintBackground(Graphics g, JComponent c, int yOffset) {
+            Dimension size = c.getSize();
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g.setColor(c.getBackground());
+            g.fillRoundRect(0, yOffset, size.width, size.height - yOffset, 10, 10);
         }
     }
 }
-
-
-// 연속 계산에서 앞에 숫자 연산자 제거 예외처리
-// 9 * 6 -   -> 54 -
