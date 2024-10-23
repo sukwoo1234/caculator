@@ -187,10 +187,25 @@ public class Calculator extends JFrame implements ActionListener {
             } else {
                 currentNumber = Double.parseDouble(display.getText());
             }
+
             operator = command;
             isOperatorPressed = true;
-            processDisplay.setText(processDisplay.getText() + display.getText() + " " + operator + " ");
+            // 연산 과정 업데이트: 기존 연산자 제거 후 새로운 연산자 추가
+            String processText = processDisplay.getText();
+            int lastOperatorIndex = Math.max(processText.lastIndexOf("+"),
+                    Math.max(processText.lastIndexOf("-"),
+                            Math.max(processText.lastIndexOf("*"),
+                                    processText.lastIndexOf("/"))));
+            if (lastOperatorIndex != -1 && lastOperatorIndex < processText.length() - 1) {
+                processText = processText.substring(0, lastOperatorIndex + 1);
+            } else {
+                processText += display.getText();
+            }
+
+            // 연산 과정 표시 업데이트
+            processDisplay.setText(currentNumber + " " + operator + " ");
         }
+
     }
 
     /**
@@ -211,8 +226,10 @@ public class Calculator extends JFrame implements ActionListener {
         // 정수로 표현 가능한 경우 소수점을 제거하고 표시
         if (currentNumber == (int) currentNumber) {
             display.setText(String.valueOf((int) currentNumber));
+            processDisplay.setText(String.valueOf((int)currentNumber));
         } else {
             display.setText(String.valueOf(currentNumber));
+            processDisplay.setText(String.valueOf(currentNumber));
         }
     }
 
