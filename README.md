@@ -29,7 +29,7 @@
 
 2. **프로젝트 클론**:
    ```bash
-   git clone https://github.com/username/Calculator.git
+   git clone https://github.com/sukwoo1234/caculator.git
 3. **프로젝트 디렉토리로 이동**:
    ```bash
    cd Calculator
@@ -38,4 +38,30 @@
    javac Calculator.java
    java Calculator
 ## 스크린샷
+![github1]([복사한 링크 주소](https://github.com/sukwoo1234/caculator/blob/main/github1.png))
+![github2]([복사한 링크 주소](https://github.com/sukwoo1234/caculator/blob/main/github2.png))
+![github3]([복사한 링크 주소](https://github.com/sukwoo1234/caculator/blob/main/github3.png))
 
+## 사용 라이브러리
+- Java Swing: 그래픽 사용자 인터페이스(GUI) 구현을 위해 사용.
+- AWT (Abstract Window Toolkit): UI 구성 요소 및 이벤트 처리를 위해 사용.
+
+## 변경 이력 (Changelog)
+- 2024-10-15: %, Del 기능 추가.
+- 2024-10-18: CE 기능 추가 및 디자인 수정.
+- 2024-10-20: 버튼 테두리 및 크기 변경.
+- 2024-10-22: 역수 연산 오류 해결.
+- 2024-10-23: +/- 버튼 추가, % 연산자 수정.
+- 2024-10-28: 연산 결과 및 연산 과정 표시 기능 개선.
+
+##기여 방법
+- 이 저장소를 포크합니다.
+- 새 브랜치를 생성합니다 (git checkout -b feature/새기능).
+- 변경 사항을 커밋합니다 (git commit -am '새 기능 추가').
+- 브랜치에 푸시합니다 (git push origin feature/새기능).
+- 풀 리퀘스트를 생성합니다.
+
+## Contact
+***
+- Mail : tnrdn6712@naver.com
+- GitHub : https://github.com/sukwoo1234
