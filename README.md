@@ -38,9 +38,9 @@
    javac Calculator.java
    java Calculator
 ## 스크린샷
-![github1]([복사한 링크 주소](https://github.com/sukwoo1234/caculator/blob/main/github1.png))
-![github2]([복사한 링크 주소](https://github.com/sukwoo1234/caculator/blob/main/github2.png))
-![github3]([복사한 링크 주소](https://github.com/sukwoo1234/caculator/blob/main/github3.png))
+![github1](https://github.com/sukwoo1234/caculator/blob/main/github1.png)
+![github2](https://github.com/sukwoo1234/caculator/blob/main/github2.png)
+![github3](https://github.com/sukwoo1234/caculator/blob/main/github3.png)
 
 ## 사용 라이브러리
 - Java Swing: 그래픽 사용자 인터페이스(GUI) 구현을 위해 사용.
