@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * <h1>Calculator</h1>
+ * Calculator
  * 이 클래스는 간단한 계산기 애플리케이션을 구현합니다.
  * <p>
  * 기본 산술 연산(덧셈, 뺄셈, 곱셈, 나눗셈) 및 초기화(C),
@@ -20,11 +20,13 @@ import java.awt.event.ActionListener;
  * @version 1.0
  * @since 1.0
  *
- * @created 2024-10-12
- * @lastModified 2024-10-23
- * @see ChatGPT, wrtn, 교과서
+ * created 2024-10-12
+ * lastModified 2024-10-23
+ * @see <a href="https://chatgpt.com/">ChatGPT</a>
+ * @see <a href="https://wrtn.ai/">wrtn</a>
+ * see 교과서
  *
- * @changelog
+ * changelog
  * <ul>
  *     <li>2024-10-12: 최초 생성 (Shin Suk Woo)</li>
  *     <li>2024-10-28: 연산결과, 연산과정 등 연산과정에 관련된 요소 생성</li>
@@ -43,11 +45,13 @@ public class Calculator extends JFrame implements ActionListener {
      * <p>
      * 메인 윈도우, 디스플레이 필드, 버튼 패널을 설정합니다.
      * </p>
-     * @created 2024-10-12
-     * @lastModified 2024-10-28
-     * @see ChatGPT, wrtn, 교과서
+     * created 2024-10-12
+     * lastModified 2024-10-28
+     * @see <a href="https://chatgpt.com/">ChatGPT</a>
+     * @see <a href="https://wrtn.ai/">wrtn</a>
+     * see 교과서
      *
-     * @changelog
+     * changelog
      * <ul>
      *     <li>2024-10-12: 최초 생성(Shin Suk Woo)</li>
      *     <li>2024-10-15: %, DEL기능 추가</li>
@@ -108,17 +112,7 @@ public class Calculator extends JFrame implements ActionListener {
 
         // 버튼 생성 및 이벤트 리스너 추가
         for (String label : buttonLabels) {
-            JButton button = new JButton(label) {
-                @Override
-                public void setUI(ButtonUI ui) {
-                    super.setUI(new RoundedButtonUI()); // 버튼 UI를 둥근 모서리로 설정
-                }
-            };
-            button.setFont(new Font("Arial", Font.PLAIN, 20)); // 버튼 글꼴 설정
-            button.setFocusPainted(false); // 포커스 표시 제거
-            button.setBackground(Color.WHITE); // 배경색 설정
-            button.setBorder(BorderFactory.createLineBorder(Color.GRAY)); // 테두리 설정
-            button.setPreferredSize(new Dimension(60, 40)); // 버튼 크기 설정
+            JButton button = getjButton(label);
             button.addActionListener(this); // 클릭 이벤트 리스너 추가
             buttonPanel.add(button); // 버튼 패널에 버튼 추가
         }
@@ -132,16 +126,33 @@ public class Calculator extends JFrame implements ActionListener {
         setVisible(true); // 윈도우 표시
     }
 
+    private static JButton getjButton(String label) {
+        JButton button = new JButton(label) {
+            @Override
+            public void setUI(ButtonUI ui) {
+                super.setUI(new RoundedButtonUI()); // 버튼 UI를 둥근 모서리로 설정
+            }
+        };
+        button.setFont(new Font("Arial", Font.PLAIN, 20)); // 버튼 글꼴 설정
+        button.setFocusPainted(false); // 포커스 표시 제거
+        button.setBackground(Color.WHITE); // 배경색 설정
+        button.setBorder(BorderFactory.createLineBorder(Color.GRAY)); // 테두리 설정
+        button.setPreferredSize(new Dimension(60, 40)); // 버튼 크기 설정
+        return button;
+    }
+
     /**
      * 버튼 클릭 이벤트를 처리하여 계산기 연산을 수행하고,
      * 버튼에 따라 디스플레이를 업데이트합니다.
      *
      * @param e 버튼 클릭으로 발생한 ActionEvent
-     * @created 2024-10-12
-     * @lastModified 2024-10-28
-     * @see ChatGPT, wrtn, 교과서
+     * created 2024-10-12
+     * lastModified 2024-10-28
+     * @see <a href="https://chatgpt.com/">ChatGPT</a>
+     * @see <a href="https://wrtn.ai/">wrtn</a>
+     * see 교과서
      *
-     * @changelog
+     * changelog
      * <ul>
      *     <li>2024-10-12: 최초 생성(Shin Suk Woo)</li>
      *     <li>2024-10-18: CE기능 추가</li>
@@ -295,11 +306,13 @@ public class Calculator extends JFrame implements ActionListener {
      * 연산 결과는 <code>currentNumber</code> 변수에 저장되고,
      * 결과 필드에 표시됩니다.
      * </p>
-     * @created 2024-10-12
-     * @lastModified 2024-10-28
-     * @see ChatGPT, wrtn, 교과서
+     * created 2024-10-12
+     * lastModified 2024-10-28
+     * @see <a href="https://chatgpt.com/">ChatGPT</a>
+     * @see <a href="https://wrtn.ai/">wrtn</a>
+     * see 교과서
      *
-     * @changelog
+     * changelog
      * <ul>
      *     <li>2024-10-12: 최초 생성(Shin Suk Woo)</li>
      *     <li>2024-10-20: 소수점 변환</li>
@@ -329,11 +342,13 @@ public class Calculator extends JFrame implements ActionListener {
      * 프로그램 실행 시 계산기 애플리케이션을 생성합니다.
      * @param args 명령줄 인수 (사용되지 않음)
      * @throws Exception UI 설정 시 발생할 수 있는 예외
-     * @created 2024-10-12
-     * @lastModified 2024-10-28
-     * @see ChatGPT, wrtn, 교과서
+     * created 2024-10-12
+     * lastModified 2024-10-28
+     * @see <a href="https://chatgpt.com/">ChatGPT</a>
+     * @see <a href="https://wrtn.ai/">wrtn</a>
+     * see 교과서
      *
-     * @changelog
+     * changelog
      * <ul>
      *      <li>2024-10-12: 최초 생성(Shin Suk Woo)</li>
      * </ul>
@@ -348,11 +363,13 @@ public class Calculator extends JFrame implements ActionListener {
      * <p>
      * 버튼의 배경, 테두리 및 포커스 효과를 커스터마이즈합니다.
      * </p>
-     * @created 2024-10-12
-     * @lastModified 2024-10-28
-     * @see ChatGPT, wrtn, 교과서
+     * created 2024-10-12
+     * lastModified 2024-10-28
+     * @see <a href="https://chatgpt.com/">ChatGPT</a>
+     * @see <a href="https://wrtn.ai/">wrtn</a>
+     * see 교과서
      *
-     * @changelog
+     * changelog
      * <ul>
      *     <li>2024-10-12: 최초 생성(Shin Suk Woo)</li>
      *     <li>2024-10-20: 버튼 테두리 및 크기 변결</li>
@@ -380,11 +397,13 @@ public class Calculator extends JFrame implements ActionListener {
          * @param g 그래픽스 객체4
          * @param c 버튼 컴포넌트
          * @param yOffset 버튼이 눌렸을 때의 오프셋
-         * @created 2024-10-12
-         * @lastModified 2024-10-28
-         * @see ChatGPT, wrtn, 교과서
+         * created 2024-10-12
+         * lastModified 2024-10-28
+         * @see <a href="https://chatgpt.com/">ChatGPT</a>
+         * @see <a href="https://wrtn.ai/">wrtn</a>
+         * see 교과서
          *
-         * @changelog
+         * changelog
          * <ul>
          *     <li>2024-10-12: 최초 생성(Shin Suk Woo)</li>
          *     <li>2023-10-18: 디자인 수정, 버튼 크기 일정</li>
